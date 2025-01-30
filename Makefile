@@ -1,4 +1,4 @@
-.PHONY: help install venv migrate test lint format clean run docker-build docker-up docker-down requirements install-dev install-prod requirements compile-deps sync-deps-dev sync-deps-prod
+.PHONY: help install venv migrate test lint format clean run docker-build docker-up docker-down requirements install-dev install-prod requirements compile-deps sync-deps-dev sync-deps-prod lint-all
 
 # Variables
 VENV_DIR = venv
@@ -27,6 +27,7 @@ help:
 	@echo "compile-deps - Compile dependencies"
 	@echo "sync-deps-dev - Sync dev dependencies"
 	@echo "sync-deps-prod - Sync prod dependencies"
+	@echo "lint-all     - Run all linting and formatting commands"
 
 # Create virtual environment
 venv:
@@ -49,11 +50,11 @@ test:
 	@echo "=== Tests completed ==="
 
 lint:
-	$(VENV_DIR)/Scrip/flake8 apps/ config/
+	$(VENV_DIR)/Scripts/flake8 apps/ config/
 	@echo "=== Code check completed ==="
 
 format:
-	$(VENV_DIR)/Scrip/black apps/ config/
+	$(VENV_DIR)/Scripts/black apps/ config/
 	@echo "=== Code formatted ==="
 
 clean:
@@ -108,4 +109,9 @@ sync-deps-dev:
 sync-deps-prod:
 	@echo "Syncing prod dependencies..."
 	$(PIP_SYNC) requirements/prod.txt
-	@echo "=== Prod dependencies synced ===" 
+	@echo "=== Prod dependencies synced ==="
+
+lint-all: format lint isort
+
+isort:
+	$(VENV_DIR)/Scripts/isort . 
