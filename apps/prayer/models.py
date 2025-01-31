@@ -1,5 +1,6 @@
 from django.db import models  # noqa: F401
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 from apps.users.models import User
 
 
@@ -110,3 +111,56 @@ class GroupMembership(models.Model):
 
     class Meta:
         unique_together = ["user", "group"]
+
+
+class MembershipRequest(models.Model):
+    """
+    Model for membership requests to private groups.
+    """
+
+    class Status(models.TextChoices):
+        PENDING = "pending", _("Pending")
+        APPROVED = "approved", _("Approved")
+        REJECTED = "rejected", _("Rejected")
+
+    group = models.ForeignKey(
+        "Group", on_delete=models.CASCADE, related_name="membership_requests"
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="membership_requests"
+    )
+    status = models.CharField(
+        max_length=8, choices=Status.choices, default=Status.PENDING
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    processed_at = models.DateTimeField(null=True, blank=True)
+    reason = models.TextField(
+        _("Reason for joining"),
+        blank=True,
+        help_text=_("User can optionally explain why they want to join."),
+    )
+
+    def approve(self):
+        """Approval of the request — create GroupMembership."""
+        from .models import GroupMembership
+
+        GroupMembership.objects.get_or_create(
+            user=self.user,
+            group=self.group,
+            defaults={"role": GroupMembership.Role.MEMBER},
+        )
+        self.status = self.Status.APPROVED
+        self.processed_at = timezone.now()
+        self.save()
+
+    def reject(self):
+        """Rejection of the request — simply set the status to rejected."""
+        self.status = self.Status.REJECTED
+        self.processed_at = timezone.now()
+        self.save()
+
+    def __str__(self):
+        return (
+            f"MembershipRequest(user={self.user}, "
+            f"group={self.group}, status={self.status})"
+        )
