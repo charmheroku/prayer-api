@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import Prayer, PrayerCategory, Group, GroupMembership
+from .models import (
+    Prayer,
+    PrayerCategory,
+    Group,
+    GroupMembership,
+    MembershipRequest,
+)
 
 
 class PrayerCategorySerializer(serializers.ModelSerializer):
@@ -86,3 +92,23 @@ class GroupMembershipSerializer(serializers.ModelSerializer):
 
     def get_user_name(self, obj):
         return obj.user.get_full_name() or obj.user.email
+
+
+class MembershipRequestSerializer(serializers.ModelSerializer):
+    group_name = serializers.ReadOnlyField(source="group.name")
+    user_email = serializers.ReadOnlyField(source="user.email")
+
+    class Meta:
+        model = MembershipRequest
+        fields = [
+            "id",
+            "group",
+            "group_name",
+            "user",
+            "user_email",
+            "status",
+            "created_at",
+            "processed_at",
+            "reason",
+        ]
+        read_only_fields = ["status", "created_at", "processed_at"]

@@ -8,6 +8,11 @@ router.register(
     r"categories", views.PrayerCategoryViewSet, basename="category"
 )
 router.register(r"groups", views.GroupViewSet, basename="group")
+router.register(
+    r"membership-requests",
+    views.MembershipRequestViewSet,
+    basename="membership-request",
+)
 
 app_name = "prayer"
 
