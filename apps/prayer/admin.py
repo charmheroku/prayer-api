@@ -1,5 +1,11 @@
 from django.contrib import admin  # noqa: F401
-from .models import Prayer, PrayerCategory, Group, GroupMembership
+from .models import (
+    Prayer,
+    PrayerCategory,
+    Group,
+    GroupMembership,
+    MembershipRequest,
+)
 
 
 @admin.register(Prayer)
@@ -34,4 +40,11 @@ class GroupAdmin(admin.ModelAdmin):
 class GroupMembershipAdmin(admin.ModelAdmin):
     list_display = ["user", "group", "role", "joined_at"]
     list_filter = ["role"]
+    search_fields = ["user__email", "group__name"]
+
+
+@admin.register(MembershipRequest)
+class MembershipRequestAdmin(admin.ModelAdmin):
+    list_display = ["user", "group", "status", "created_at", "processed_at"]
+    list_filter = ["status"]
     search_fields = ["user__email", "group__name"]
