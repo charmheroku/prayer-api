@@ -14,7 +14,7 @@ This project allows you to:
 
 ## 🌐 Try the API with Swagger Online
 
-You can explore the project live: [Prayer API]([https://prayer-api-z92x.onrender.com/api/schema/swagger/])  
+You can explore the project live: [Prayer API](https://prayer-api-z92x.onrender.com/api/schema/swagger/)
 
 ### Test Admin Credentials:  
 - **Email**: `admin@example.com`  
