@@ -1,0 +1,264 @@
+[
+    {
+      "model": "users.user",
+      "pk": 1,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$S8FDUckRe0HACG1XDTgcn7$PS9qj3Um9oZOC6M0pRSXz3oBynI2ouoIwy996ZWyy+g=",
+        "email": "admin@example.com",
+        "is_active": true,
+        "is_staff": true,
+        "is_superuser": true,
+        "first_name": "Admin",
+        "last_name": "User",
+        "role": "admin",
+        "phone": "",
+        "bio": "Адміністратор спільноти",
+        "avatar": "",
+        "date_joined": "2024-02-20T10:00:00Z",
+        "last_login": null,
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 2,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$S8FDUckRe0HACG1XDTgcn7$PS9qj3Um9oZOC6M0pRSXz3oBynI2ouoIwy996ZWyy+g=",
+        "email": "user@example.com",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false,
+        "first_name": "Олександр",
+        "last_name": "Петренко",
+        "role": "user",
+        "phone": "+380991234567",
+        "bio": "Активний учасник молитовної спільноти",
+        "avatar": "",
+        "date_joined": "2024-02-20T10:00:00Z",
+        "last_login": null,
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "users.user",
+      "pk": 3,
+      "fields": {
+        "password": "pbkdf2_sha256$600000$S8FDUckRe0HACG1XDTgcn7$PS9qj3Um9oZOC6M0pRSXz3oBynI2ouoIwy996ZWyy+g=",
+        "email": "maria@example.com",
+        "is_active": true,
+        "is_staff": false,
+        "is_superuser": false,
+        "first_name": "Марія",
+        "last_name": "Коваленко",
+        "role": "user",
+        "phone": "+380997654321",
+        "bio": "Модератор групи молитви за дітей",
+        "avatar": "",
+        "date_joined": "2024-02-20T10:00:00Z",
+        "last_login": null,
+        "groups": [],
+        "user_permissions": []
+      }
+    },
+    {
+      "model": "prayer.prayercategory",
+      "pk": 1,
+      "fields": {
+        "name": "Мир в Україні",
+        "description": "Молитви за мир та відновлення України",
+        "created_at": "2024-02-20T10:00:00Z",
+        "created_by": 1
+      }
+    },
+    {
+      "model": "prayer.prayercategory",
+      "pk": 2,
+      "fields": {
+        "name": "Захисники",
+        "description": "Молитви за захисників України",
+        "created_at": "2024-02-20T10:00:00Z",
+        "created_by": 1
+      }
+    },
+    {
+      "model": "prayer.prayercategory",
+      "pk": 3,
+      "fields": {
+        "name": "Зцілення",
+        "description": "Молитви за фізичне та духовне зцілення",
+        "created_at": "2024-02-20T10:00:00Z",
+        "created_by": 1
+      }
+    },
+    {
+      "model": "prayer.prayercategory",
+      "pk": 4,
+      "fields": {
+        "name": "Подяка",
+        "description": "Молитви подяки",
+        "created_at": "2024-02-20T10:00:00Z",
+        "created_by": 1
+      }
+    },
+    {
+      "model": "prayer.group",
+      "pk": 1,
+      "fields": {
+        "name": "Молитва за Україну",
+        "description": "Спільнота молитви за мир та перемогу України",
+        "is_private": false,
+        "created_at": "2024-02-20T10:00:00Z",
+        "created_by": 1
+      }
+    },
+    {
+      "model": "prayer.group",
+      "pk": 2,
+      "fields": {
+        "name": "Молитва за захисників",
+        "description": "Молитовна підтримка українських воїнів",
+        "is_private": false,
+        "created_at": "2024-02-20T10:00:00Z",
+        "created_by": 2
+      }
+    },
+    {
+      "model": "prayer.group",
+      "pk": 3,
+      "fields": {
+        "name": "Молитва за дітей України",
+        "description": "Група молитви за українських дітей",
+        "is_private": true,
+        "created_at": "2024-02-20T10:00:00Z",
+        "created_by": 3
+      }
+    },
+    {
+      "model": "prayer.groupmembership",
+      "pk": 1,
+      "fields": {
+        "user": 1,
+        "group": 1,
+        "role": "admin",
+        "joined_at": "2024-02-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "prayer.groupmembership",
+      "pk": 2,
+      "fields": {
+        "user": 2,
+        "group": 1,
+        "role": "member",
+        "joined_at": "2024-02-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "prayer.groupmembership",
+      "pk": 3,
+      "fields": {
+        "user": 3,
+        "group": 1,
+        "role": "member",
+        "joined_at": "2024-02-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "prayer.prayer",
+      "pk": 1,
+      "fields": {
+        "title": "Молитва за мир в Україні",
+        "content": "Господи, просимо Тебе про мир для України. Захисти наш народ, даруй мудрість лідерам та хоробрість захисникам. Нехай запанує мир на нашій землі.",
+        "author": 1,
+        "category": 1,
+        "group": 1,
+        "status": "active",
+        "privacy_level": "public",
+        "prayer_count": 125,
+        "is_anonymous": false,
+        "created_at": "2024-02-20T10:00:00Z",
+        "updated_at": "2024-02-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "prayer.prayer",
+      "pk": 2,
+      "fields": {
+        "title": "За захисників України",
+        "content": "Боже, бережи наших захисників! Даруй їм сили, мужності та витривалості. Захищай їх на передовій та поверни живими додому.",
+        "author": 2,
+        "category": 2,
+        "group": 2,
+        "status": "active",
+        "privacy_level": "public",
+        "prayer_count": 89,
+        "is_anonymous": false,
+        "created_at": "2024-02-20T10:00:00Z",
+        "updated_at": "2024-02-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "prayer.prayer",
+      "pk": 3,
+      "fields": {
+        "title": "Молитва за поранених воїнів",
+        "content": "Господи, просимо зцілення для поранених захисників. Даруй їм швидке одужання та повне відновлення.",
+        "author": 3,
+        "category": 3,
+        "group": 2,
+        "status": "active",
+        "privacy_level": "public",
+        "prayer_count": 67,
+        "is_anonymous": false,
+        "created_at": "2024-02-20T10:00:00Z",
+        "updated_at": "2024-02-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "prayer.prayer",
+      "pk": 4,
+      "fields": {
+        "title": "Подяка за єдність",
+        "content": "Дякуємо за неймовірну єдність українського народу. За силу духу та незламність.",
+        "author": 1,
+        "category": 4,
+        "group": 1,
+        "status": "active",
+        "privacy_level": "public",
+        "prayer_count": 156,
+        "is_anonymous": false,
+        "created_at": "2024-02-20T10:00:00Z",
+        "updated_at": "2024-02-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "prayer.prayer",
+      "pk": 5,
+      "fields": {
+        "title": "За дітей України",
+        "content": "Господи, захисти всіх українських дітей. Даруй їм мирне небо та щасливе дитинство.",
+        "author": 3,
+        "category": 1,
+        "group": 3,
+        "status": "active",
+        "privacy_level": "group",
+        "prayer_count": 45,
+        "is_anonymous": false,
+        "created_at": "2024-02-20T10:00:00Z",
+        "updated_at": "2024-02-20T10:00:00Z"
+      }
+    },
+    {
+      "model": "prayer.membershiprequest",
+      "pk": 1,
+      "fields": {
+        "user": 2,
+        "group": 3,
+        "status": "pending",
+        "reason": "Хочу долучитися до молитви за українських дітей",
+        "created_at": "2024-02-20T10:00:00Z"
+      }
+    }
+  ]

@@ -9,4 +9,7 @@ pip install -r requirements/prod.txt
 python manage.py collectstatic --no-input
 
 # Run migrations
-python manage.py migrate 
+python manage.py migrate
+
+# Load fixtures
+python manage.py loaddata fixtures/initial_data.json 
