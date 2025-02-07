@@ -1,8 +1,8 @@
-from django.shortcuts import render  # noqa: F401
+from django.shortcuts import render, get_object_or_404  # noqa: F401
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.db.models import Q
+from django.db.models import Q, Exists, OuterRef
 from .models import (
     Prayer,
     PrayerCategory,
@@ -58,8 +58,15 @@ class PrayerViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """
         Automatically assign the author to the prayer upon creation.
+        If the prayer belongs to a private group, set privacy_level to GROUP.
         """
-        serializer.save(author=self.request.user)
+        group = serializer.validated_data.get("group")
+        privacy_level = Prayer.PrivacyLevel.PRIVATE
+
+        if group and group.is_private:
+            privacy_level = Prayer.PrivacyLevel.GROUP
+
+        serializer.save(author=self.request.user, privacy_level=privacy_level)
 
     @action(detail=True, methods=["post"])
     def pray(self, request, pk=None):
@@ -93,7 +100,8 @@ class PrayerCategoryViewSet(viewsets.ModelViewSet):
 
 class GroupViewSet(viewsets.ModelViewSet):
     """
-    ViewSet for Group model.
+    ViewSet for managing groups.
+    Also contains actions for listing/creating prayers in a specific group.
     """
 
     queryset = Group.objects.all()
@@ -118,14 +126,20 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """
-        Returns:
-        1) public groups (is_private=False)
-        2) private groups if the user is a member
+        Returns all groups with an additional field indicating
+        whether the user is a member of each group.
         """
         user = self.request.user
-        return Group.objects.filter(
-            Q(is_private=False) | Q(members=user)
-        ).distinct()
+        groups = Group.objects.all().annotate(
+            is_member=Exists(
+                GroupMembership.objects.filter(
+                    group=OuterRef("pk"),
+                    user=user,
+                )
+            )
+        )
+
+        return groups
 
     def perform_create(self, serializer):
         """
@@ -137,6 +151,53 @@ class GroupViewSet(viewsets.ModelViewSet):
             group=group,
             role=GroupMembership.Role.ADMIN,
         )
+
+    @action(detail=True, methods=["get", "post"], url_path="prayers")
+    def prayers(self, request, pk=None):
+        """
+        GET  -> list of prayers for the selected group
+        POST -> create a new prayer in this group
+        """
+        group = self.get_object()  # Получаем группу по pk
+
+        if request.method == "GET":
+            # Logic for returning a list of prayers
+            queryset = (
+                Prayer.objects.filter(group=group)
+                .filter(
+                    Q(privacy_level=Prayer.PrivacyLevel.PUBLIC)
+                    | Q(
+                        privacy_level=Prayer.PrivacyLevel.GROUP,
+                        group__members=request.user,
+                    )
+                    | Q(author=request.user)
+                )
+                .distinct()
+            )
+            serializer = PrayerSerializer(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        elif request.method == "POST":
+            # Logic for creating a prayer
+            serializer = PrayerSerializer(data=request.data)
+            if serializer.is_valid():
+
+                if group.is_private:
+                    privacy_level = Prayer.PrivacyLevel.GROUP
+                else:
+                    privacy_level = Prayer.PrivacyLevel.PUBLIC
+
+                serializer.save(
+                    author=request.user,
+                    group=group,
+                    privacy_level=privacy_level,
+                )
+                return Response(
+                    serializer.data, status=status.HTTP_201_CREATED
+                )
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
 
     @action(detail=True, methods=["post"])
     def join(self, request, pk=None):
