@@ -55,6 +55,8 @@ class PrayerSerializer(serializers.ModelSerializer):
 
 class GroupSerializer(serializers.ModelSerializer):
     member_count = serializers.SerializerMethodField()
+    is_member = serializers.BooleanField(read_only=True)
+    user_membership_status = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
@@ -66,14 +68,28 @@ class GroupSerializer(serializers.ModelSerializer):
             "created_by",
             "member_count",
             "created_at",
+            "is_member",
+            "user_membership_status",
         ]
         read_only_fields = ["created_by", "created_at"]
 
     def get_member_count(self, obj):
         return obj.members.count()
 
+    def get_user_membership_status(self, obj):
+        user = self.context["request"].user
+        membership_request = MembershipRequest.objects.filter(
+            group=obj, user=user
+        ).first()
+        if membership_request:
+            return (
+                membership_request.status
+            )  # 'pending', 'approved', 'rejected'
+        return "no_request"
+
 
 class GroupMembershipSerializer(serializers.ModelSerializer):
+
     user_email = serializers.EmailField(source="user.email", read_only=True)
     user_name = serializers.SerializerMethodField()
 
