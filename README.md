@@ -1,4 +1,4 @@
-# Prayer-Api
+# 👨‍👩‍👧‍👦 Prayer-Api
 
 Django application that unites people in their good deeds.
 Service for creating prayer groups, publishing prayers, joining a community and supporting each other.
@@ -11,6 +11,16 @@ This project allows you to:
 - Publish prayers in certain categories
 - Pray together for common or personal needs
 - Send requests to join private groups
+
+## 🌐 Try the API with Swagger Online
+
+You can explore the project live: [Prayer API]([https://prayer-api-z92x.onrender.com/api/schema/swagger/])  
+
+### Test Admin Credentials:  
+- **Email**: `admin@example.com`  
+- **Password**: `admin12345`  
+
+Feel free to log in and explore the features!
 
 ## Main functional blocks
 
