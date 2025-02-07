@@ -35,7 +35,8 @@ class PrayerViewSet(viewsets.ModelViewSet):
         """
         if self.action in ["update", "partial_update", "destroy"]:
             # Only the group admin or the author can change or remove prayers
-            # We'll check group-admin with IsGroupAdmin, and check the author in the method has_object_permission or override
+            # We'll check group-admin with IsGroupAdmin, and check the
+            # author in the method has_object_permission or override
             return [permissions.IsAuthenticated(), IsGroupAdmin()]
         else:
             # For create, retrieve, list - at least be authenticated
@@ -234,7 +235,8 @@ class GroupViewSet(viewsets.ModelViewSet):
         For private groups, users must send a membership request.
         """
         try:
-            # Important: here we use Group.objects.get instead of self.get_object()
+            # Important: here we use Group.objects.get
+            # instead of self.get_object()
             group = Group.objects.get(pk=pk)
         except Group.DoesNotExist:
             return Response(
@@ -250,9 +252,11 @@ class GroupViewSet(viewsets.ModelViewSet):
         if not group.is_private:
             return Response(
                 {
-                    "detail": "This group is not private. You can directly join."
+                    "detail": "This group is not private. "
+                    "You can directly join."
                 },
                 status=status.HTTP_400_BAD_REQUEST,
+
             )
 
         # Check for duplicate pending request
