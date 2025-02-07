@@ -60,6 +60,8 @@ oauthlib==3.2.2
     # via
     #   requests-oauthlib
     #   social-auth-core
+pillow==11.1.0
+    # via -r requirements/base.in
 psycopg2-binary==2.9.10
     # via -r requirements/base.in
 pycparser==2.22
